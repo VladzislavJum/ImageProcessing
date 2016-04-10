@@ -88,7 +88,7 @@ public class ImageScanner {
                 color = new Color(originalImage.getRGB(i, j));
                 red = 255 - (color.getRed());
                 green = 255 - (color.getGreen());
-                blue = 255 -  (color.getBlue());
+                blue = 255 - (color.getBlue());
                 image.setRGB(i, j, new Color(red, green, blue).getRGB());
             }
         }
@@ -96,7 +96,7 @@ public class ImageScanner {
     }
 
 
-    public BufferedImage segmentationImage(int value){
+    public BufferedImage segmentationImage(int value) {
         return new SegmentHandler(originalImage, value).getSegmentationImage();
     }
 }

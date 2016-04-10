@@ -24,8 +24,6 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
@@ -80,6 +78,10 @@ public class MainWindow {
         JMenuItem segmentationItem60 = new JMenuItem("60");
         JMenuItem segmentationItem100 = new JMenuItem("100");
 
+        segmentationItem20.setActionCommand("20");
+        segmentationItem60.setActionCommand("60");
+        segmentationItem100.setActionCommand("100");
+
         filter1Item.setActionCommand(Path.FILTER1.getPath());
         filter2Item.setActionCommand(Path.FILTER2.getPath());
         filter3Item.setActionCommand(Path.FILTER3.getPath());
@@ -97,28 +99,19 @@ public class MainWindow {
             newImageLabel.setIcon(new ImageIcon(imageScanner.anaglyphImage()));
         });
 
-        segmentationItem20.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ImageScanner imageScanner = new ImageScanner(image);
-                newImageLabel.setIcon(new ImageIcon(imageScanner.segmentationImage(20)));
-            }
+        segmentationItem20.addActionListener(e -> {
+            ImageScanner imageScanner = new ImageScanner(image);
+            newImageLabel.setIcon(new ImageIcon(imageScanner.segmentationImage(Integer.valueOf(e.getActionCommand()))));
         });
 
-        segmentationItem60.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ImageScanner imageScanner = new ImageScanner(image);
-                newImageLabel.setIcon(new ImageIcon(imageScanner.segmentationImage(60)));
-            }
+        segmentationItem60.addActionListener(e -> {
+            ImageScanner imageScanner = new ImageScanner(image);
+            newImageLabel.setIcon(new ImageIcon(imageScanner.segmentationImage(Integer.valueOf(e.getActionCommand()))));
         });
 
-        segmentationItem100.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ImageScanner imageScanner = new ImageScanner(image);
-                newImageLabel.setIcon(new ImageIcon(imageScanner.segmentationImage(100)));
-            }
+        segmentationItem100.addActionListener(e -> {
+            ImageScanner imageScanner = new ImageScanner(image);
+            newImageLabel.setIcon(new ImageIcon(imageScanner.segmentationImage(Integer.valueOf(e.getActionCommand()))));
         });
 
         fileMenu.add(loadItem);
