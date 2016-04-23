@@ -3,6 +3,8 @@ package by.jum.imageprocessing.ui;
 import by.jum.imageprocessing.processing.FilterLoader;
 import by.jum.imageprocessing.processing.ImageLoaderSaver;
 import by.jum.imageprocessing.processing.ImageScanner;
+import by.jum.imageprocessing.processing.RotationHandler;
+import by.jum.imageprocessing.processing.ScalabilityHandler;
 import by.jum.imageprocessing.utils.constants.MenuConstants;
 import by.jum.imageprocessing.utils.constants.Path;
 import org.apache.log4j.Logger;
@@ -16,7 +18,9 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JToolBar;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
@@ -61,74 +65,17 @@ public class MainWindow {
 
     public void createMenu() {
         JMenuBar menuBar = new JMenuBar();
-        JMenu filtersMenu = new JMenu(MenuConstants.PROCESSING.getName());
         JMenu fileMenu = new JMenu(MenuConstants.FILE.getName());
-        JMenu segmentationMenu = new JMenu(MenuConstants.SEGMENT.getName());
-
 
         JMenuItem loadItem = new JMenuItem(MenuConstants.LOAD_IMAGE.getName());
         JMenuItem saveItem = new JMenuItem(MenuConstants.SAVE_IMAGE.getName());
         addFileChooser(loadItem);
-
-        JMenuItem filter1Item = new JMenuItem(MenuConstants.FILTER_1.getName());
-        JMenuItem filter2Item = new JMenuItem(MenuConstants.FILTER_2.getName());
-        JMenuItem filter3Item = new JMenuItem(MenuConstants.FILTER_3.getName());
-        JMenuItem anaglifItem = new JMenuItem(MenuConstants.ANAGLIF.getName());
-        JMenuItem segmentationItem20 = new JMenuItem("20");
-        JMenuItem segmentationItem60 = new JMenuItem("60");
-        JMenuItem segmentationItem100 = new JMenuItem("100");
-
-        segmentationItem20.setActionCommand("20");
-        segmentationItem60.setActionCommand("60");
-        segmentationItem100.setActionCommand("100");
-
-        filter1Item.setActionCommand(Path.FILTER1.getPath());
-        filter2Item.setActionCommand(Path.FILTER2.getPath());
-        filter3Item.setActionCommand(Path.FILTER3.getPath());
-
-        filter1Item.addActionListener(e -> {
-            ImageScanner imageScanner = new ImageScanner(image);
-            newImageLabel.setIcon(new ImageIcon(imageScanner.negativ()));});
-
-        filter2Item.addActionListener(e -> setFilter(e.getActionCommand()));
-
-        filter3Item.addActionListener(e -> setFilter(e.getActionCommand()));
-
-        anaglifItem.addActionListener(e -> {
-            ImageScanner imageScanner = new ImageScanner(image);
-            newImageLabel.setIcon(new ImageIcon(imageScanner.anaglyphImage()));
-        });
-
-        segmentationItem20.addActionListener(e -> {
-            ImageScanner imageScanner = new ImageScanner(image);
-            newImageLabel.setIcon(new ImageIcon(imageScanner.segmentationImage(Integer.valueOf(e.getActionCommand()))));
-        });
-
-        segmentationItem60.addActionListener(e -> {
-            ImageScanner imageScanner = new ImageScanner(image);
-            newImageLabel.setIcon(new ImageIcon(imageScanner.segmentationImage(Integer.valueOf(e.getActionCommand()))));
-        });
-
-        segmentationItem100.addActionListener(e -> {
-            ImageScanner imageScanner = new ImageScanner(image);
-            newImageLabel.setIcon(new ImageIcon(imageScanner.segmentationImage(Integer.valueOf(e.getActionCommand()))));
-        });
-
         fileMenu.add(loadItem);
 //        fileMenu.add(saveItem);
-        filtersMenu.add(filter1Item);
-        filtersMenu.add(filter2Item);
-        filtersMenu.add(filter3Item);
-        filtersMenu.add(anaglifItem);
-
-        segmentationMenu.add(segmentationItem20);
-        segmentationMenu.add(segmentationItem60);
-        segmentationMenu.add(segmentationItem100);
-
 
         menuBar.add(fileMenu);
-        menuBar.add(filtersMenu);
-        menuBar.add(segmentationMenu);
+        addFilterMenu(menuBar);
+        addSegmentationMenu(menuBar);
 
         window.setJMenuBar(menuBar);
     }
@@ -171,6 +118,9 @@ public class MainWindow {
         toolBar.setLayout(new FlowLayout(FlowLayout.LEFT));
         toolBar.setFloatable(false);
 
+        addRotation(toolBar);
+        addScalability(toolBar);
+
         window.add(toolBar, BorderLayout.NORTH);
     }
 
@@ -180,4 +130,84 @@ public class MainWindow {
                 filterLoader.getFilter(pathFilter), filterLoader.getDiv()
         )));
     }
+
+    private void addSegmentationMenu(JMenuBar menuBar) {
+        JMenuItem segmentationItem20 = new JMenuItem("20");
+        JMenuItem segmentationItem60 = new JMenuItem("60");
+        JMenuItem segmentationItem100 = new JMenuItem("100");
+
+        segmentationItem20.setActionCommand("20");
+        segmentationItem60.setActionCommand("60");
+        segmentationItem100.setActionCommand("100");
+
+        segmentationItem20.addActionListener(e -> {
+            ImageScanner imageScanner = new ImageScanner(image);
+            newImageLabel.setIcon(new ImageIcon(imageScanner.segmentationImage(Integer.valueOf(e.getActionCommand()))));
+        });
+
+        segmentationItem60.addActionListener(e -> {
+            ImageScanner imageScanner = new ImageScanner(image);
+            newImageLabel.setIcon(new ImageIcon(imageScanner.segmentationImage(Integer.valueOf(e.getActionCommand()))));
+        });
+
+        segmentationItem100.addActionListener(e -> {
+            ImageScanner imageScanner = new ImageScanner(image);
+            newImageLabel.setIcon(new ImageIcon(imageScanner.segmentationImage(Integer.valueOf(e.getActionCommand()))));
+        });
+
+        JMenu segmentationMenu = new JMenu(MenuConstants.SEGMENT.getName());
+
+        segmentationMenu.add(segmentationItem20);
+        segmentationMenu.add(segmentationItem60);
+        segmentationMenu.add(segmentationItem100);
+        menuBar.add(segmentationMenu);
+    }
+
+    private void addFilterMenu(JMenuBar menuBar) {
+        JMenu filtersMenu = new JMenu(MenuConstants.PROCESSING.getName());
+        JMenuItem filter1Item = new JMenuItem(MenuConstants.FILTER_1.getName());
+        JMenuItem filter2Item = new JMenuItem(MenuConstants.FILTER_2.getName());
+        JMenuItem filter3Item = new JMenuItem(MenuConstants.FILTER_3.getName());
+        JMenuItem anaglifItem = new JMenuItem(MenuConstants.ANAGLIF.getName());
+
+        filter1Item.setActionCommand(Path.FILTER1.getPath());
+        filter2Item.setActionCommand(Path.FILTER2.getPath());
+        filter3Item.setActionCommand(Path.FILTER3.getPath());
+
+        filter1Item.addActionListener(e -> {
+            ImageScanner imageScanner = new ImageScanner(image);
+            newImageLabel.setIcon(new ImageIcon(imageScanner.negativ()));
+        });
+
+        filter2Item.addActionListener(e -> setFilter(e.getActionCommand()));
+
+        filter3Item.addActionListener(e -> setFilter(e.getActionCommand()));
+
+        anaglifItem.addActionListener(e -> {
+            ImageScanner imageScanner = new ImageScanner(image);
+            newImageLabel.setIcon(new ImageIcon(imageScanner.anaglyphImage()));
+        });
+
+        filtersMenu.add(filter1Item);
+        filtersMenu.add(filter2Item);
+        filtersMenu.add(filter3Item);
+        filtersMenu.add(anaglifItem);
+
+        menuBar.add(filtersMenu);
+    }
+
+    private void addRotation(JToolBar toolBar) {
+        JSpinner spinner = new JSpinner();
+        spinner.setModel(new SpinnerNumberModel(0, 0, 360, 30));
+        toolBar.add(spinner);
+        spinner.addChangeListener(e -> newImageLabel.setIcon(new ImageIcon(new RotationHandler().createRotationImage(image, (Integer) spinner.getValue()))));
+    }
+
+    private void addScalability(JToolBar toolBar) {
+        JSpinner spinner = new JSpinner();
+        spinner.setModel(new SpinnerNumberModel(1, 0, 10, 0.1));
+        toolBar.add(spinner);
+        spinner.addChangeListener(e -> newImageLabel.setIcon(new ImageIcon(new ScalabilityHandler().createScalabilityImage(image, (Double) spinner.getValue()))));
+    }
+
 }

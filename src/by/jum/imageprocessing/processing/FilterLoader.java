@@ -9,7 +9,6 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class FilterLoader {
-
     private static final Logger LOGGER = Logger.getLogger(FilterLoader.class);
     private final Random random = new Random();
     private double filter[][];
@@ -50,5 +49,4 @@ public class FilterLoader {
     public int getDiv() {
         return div;
     }
-
 }

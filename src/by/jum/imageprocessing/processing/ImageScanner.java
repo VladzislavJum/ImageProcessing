@@ -7,7 +7,6 @@ import java.awt.image.BufferedImage;
 import java.util.Random;
 
 public class ImageScanner {
-
     private static final Logger LOGGER = Logger.getLogger(ImageScanner.class);
 
     private BufferedImage originalImage;
@@ -38,13 +37,13 @@ public class ImageScanner {
         image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                image.setRGB(i, j, cumputeRGB(filter, i, j, indent));
+                image.setRGB(i, j, computeRGB(filter, i, j, indent));
             }
         }
         return image;
     }
 
-    private int cumputeRGB(double filter[][], int x, int y, int indent) {
+    private int computeRGB(double filter[][], int x, int y, int indent) {
         int length = filter.length;
         int xBound, yBound, sum = 0;
         Color color;
@@ -97,6 +96,6 @@ public class ImageScanner {
 
 
     public BufferedImage segmentationImage(int value) {
-        return new SegmentHandler(originalImage, value).getSegmentationImage();
+        return new SegmentationHandler(originalImage, value).getSegmentationImage();
     }
 }

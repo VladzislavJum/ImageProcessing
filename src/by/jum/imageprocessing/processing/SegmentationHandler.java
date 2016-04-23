@@ -5,13 +5,12 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SegmentHandler {
-
+public class SegmentationHandler {
     private int value;
     private BufferedImage originalImage;
     private List<Integer> segmentationRGB;
 
-    public SegmentHandler(BufferedImage originalImage, int value) {
+    public SegmentationHandler(BufferedImage originalImage, int value) {
         this.originalImage = originalImage;
         this.value = value;
     }

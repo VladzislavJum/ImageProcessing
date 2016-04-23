@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.IOException;
 
 public class ImageLoaderSaver {
-
     private static final Logger LOGGER = Logger.getLogger(ImageLoaderSaver.class);
 
     private BufferedImage image = null;
@@ -28,10 +27,7 @@ public class ImageLoaderSaver {
         }
     }
 
-    //TODO: add Body Save
-    public void saveImage() {
-
-    }
+    //TODO: add saveNewImage()
 
     public BufferedImage getImage() {
         return image;
